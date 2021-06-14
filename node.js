@@ -84,10 +84,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 
     function onChangeAspectType(event) {
-        let container = this.parentNode;
-        let i = [...container.parentNode.children].findIndex(x => x === container);
-        ASPECT_HALOS[i].aspect = this.value;
-        container.querySelector(".aspect-icon").src = "all-aspects.svg#" + this.value;
     };
     
     function onChangeAspectAmount(event) {
@@ -97,12 +93,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
     
     function addAspect() {
-        let aspectContainerList = document.getElementById("aspects");
-        let aspectContainer = document.createElement("div");
-        let aspectSelect = document.createElement("select");
-        let aspectAmount = document.createElement("input");
-        let aspectAmountLabel = document.createElement("label");
-        const aspectIcon = document.createElement("img");
+        const aspectContainerList = document.getElementById("aspects");
+        const aspectContainer = document.createElement("div");
+        const aspectSelect = document.createElement("select");
+        const aspectAmount = document.createElement("input");
+        const aspectAmountLabel = document.createElement("label");
+        const aspectSelectDiv = document.createElement("div");
     
         /** @type {String[]} */
         let currentAspects = ASPECT_HALOS.reduce((carry, x) => { carry.push(x.aspect); return carry; }, []);
@@ -117,20 +113,63 @@ document.addEventListener("DOMContentLoaded", function (event) {
             } 
             aspectSelect.appendChild(o);
         }
+
+        const a = document.createElement("div");
+        const aa = document.createElement("div");
+        const aspectIconDiv = document.createElement("div");
+        const aspectIcon = document.createElement("img");
+        const aspectIconBack = document.createElement("img");
+        aspectIconDiv.appendChild(aspectIcon);
+        aspectIconDiv.appendChild(aspectIconBack);
+        aspectIconDiv.classList.add("aspect-icon");
+        aspectIconBack.src = "back.svg";
+        aspectIconBack.classList.add("aspect-icon-back");
+        aspectIcon.src = "all-aspects.svg#" + defaultSelected;
+        aspectIcon.classList.add("aspect-icon-fg");
+        a.appendChild(aspectIconDiv);
+        a.appendChild(aa);
+        a.setAttribute("class", "select-selected");
+        aa.classList.add("aspect-name");
+        aa.innerHTML = aspectSelect.options[aspectSelect.selectedIndex].innerHTML;
+        aspectSelectDiv.appendChild(a);
+        a.addEventListener("click", closeAllSelect);
+
+        const b = document.createElement("div");
+        b.classList.add("select-items", "select-hide");
+        for (const aa of aspectSelect.options) {
+            const c = document.createElement("div");
+            const ca = document.createElement("div");
+            const cIconDiv = document.createElement("div");
+            const cIconFg = document.createElement("img");
+            const cIconBg = document.createElement("img");
+            cIconDiv.classList.add("aspect-icon");
+            cIconFg.classList.add("aspect-icon-fg");
+            cIconBg.classList.add("aspect-icon-back");
+            cIconFg.src = "all-aspects.svg#" + aa.value;
+            cIconBg.src = "back.svg";
+            ca.classList.add("aspect-name");
+            ca.innerHTML = aa.innerHTML;
+            cIconDiv.appendChild(cIconFg);
+            cIconDiv.appendChild(cIconBg);
+            c.appendChild(cIconDiv);
+            c.appendChild(ca);
+            c.addEventListener("click", clickSelectOption);
+            b.appendChild(c);
+        }
+        aspectSelectDiv.appendChild(b);
     
+        aspectSelectDiv.classList.add("div-aspect-select");
         aspectContainer.classList.add("aspect");
         aspectSelect.classList.add("aspect-type");
         aspectAmount.classList.add("aspect-amount");
-        aspectIcon.classList.add("aspect-icon");
         aspectAmount.type = "number";
         aspectAmount.value = "25";
         aspectAmount.min = 1;
         aspectAmount.step = 1;
-        aspectIcon.src = "all-aspects.svg#" + defaultSelected;
         aspectAmountLabel.appendChild(document.createTextNode("Vis count: "));
         aspectAmountLabel.appendChild(aspectAmount);
-        aspectContainer.appendChild(aspectIcon);
-        aspectContainer.appendChild(aspectSelect);
+        aspectSelectDiv.appendChild(aspectSelect)
+        aspectContainer.appendChild(aspectSelectDiv);
         aspectContainer.appendChild(aspectAmountLabel);
         aspectContainerList.appendChild(aspectContainer);
     
@@ -142,6 +181,49 @@ document.addEventListener("DOMContentLoaded", function (event) {
             count: 25,
             bufferInfo: twgl.primitives.createXYQuadBufferInfo(gl, 1, 0, 0)
         });
+    }
+
+    /** Click event handler for an aspect list custom select dropdown option. */
+    function clickSelectOption() {
+        const selectElement = this.parentNode.parentNode.querySelector("select");
+        const selectedOptionElement = this.parentNode.previousSibling;
+        const value = this.querySelector(".aspect-name").innerHTML;
+        for (let i = 0; i < selectElement.length; i++) {
+            if (selectElement.options[i].innerHTML === value) {
+                selectElement.selectedIndex = i;
+                selectedOptionElement.querySelector(".aspect-name").innerHTML = value;
+                selectedOptionElement.querySelector(".aspect-icon-fg").src = "all-aspects.svg#" + selectElement.value;
+                let container = this.parentNode.parentNode.parentNode;
+                let ii = [...container.parentNode.children].findIndex(x => x === container);
+                ASPECT_HALOS[ii].aspect = selectElement.value;
+                for (const x of this.parentNode.parentNode.children) x.classList.remove("same-as-selected");
+                this.classList.add("same-as-selected");
+            }
+        }
+        selectedOptionElement.click();
+    }
+
+    /** Click event handler for closing an aspect list select */
+    function closeAllSelect(event) {
+        event.stopPropagation();
+
+        const arrNo = [];
+        const x = document.getElementsByClassName("select-items");
+        const y = document.getElementsByClassName("select-selected");
+        for (let i = 0; i < y.length; i++) {
+            if (this == y[i]) {
+                arrNo.push(i)
+            } else {
+                y[i].classList.remove("select-arrow-active");
+            }
+        }
+        for (let i = 0; i < x.length; i++) {
+            if (arrNo.indexOf(i)) {
+                x[i].classList.add("select-hide");
+            }
+        }
+        this.nextSibling.classList.toggle("select-hide");
+        this.classList.toggle("select-arrow-active");
     }
     
     function getVisTotal() {
