@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Minecraft Regular";
+    src: url("minecraft-regular.otf");
+}
+
 body {
     margin: 0;
 }
@@ -9,4 +14,20 @@ body {
     width: 100vw;
     height: 100vh;
     z-index: -1;
+}
+
+#controls {
+    background: #202020c0;
+    width: max-content;
+    font-family: "Minecraft Regular";
+    color: white;
+}
+
+.aspect-amount {
+    width: 4em;
+}
+
+.aspect-icon {
+    width: 2em;
+    height: 2em;
 }

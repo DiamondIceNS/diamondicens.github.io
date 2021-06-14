@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let container = this.parentNode;
         let i = [...container.parentNode.children].findIndex(x => x === container);
         ASPECT_HALOS[i].aspect = this.value;
+        container.querySelector(".aspect-icon").src = "all-aspects.svg#" + this.value;
     };
     
     function onChangeAspectAmount(event) {
@@ -101,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let aspectSelect = document.createElement("select");
         let aspectAmount = document.createElement("input");
         let aspectAmountLabel = document.createElement("label");
+        const aspectIcon = document.createElement("img");
     
         /** @type {String[]} */
         let currentAspects = ASPECT_HALOS.reduce((carry, x) => { carry.push(x.aspect); return carry; }, []);
@@ -119,12 +121,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
         aspectContainer.classList.add("aspect");
         aspectSelect.classList.add("aspect-type");
         aspectAmount.classList.add("aspect-amount");
+        aspectIcon.classList.add("aspect-icon");
         aspectAmount.type = "number";
         aspectAmount.value = "25";
         aspectAmount.min = 1;
         aspectAmount.step = 1;
+        aspectIcon.src = "all-aspects.svg#" + defaultSelected;
         aspectAmountLabel.appendChild(document.createTextNode("Vis count: "));
         aspectAmountLabel.appendChild(aspectAmount);
+        aspectContainer.appendChild(aspectIcon);
         aspectContainer.appendChild(aspectSelect);
         aspectContainer.appendChild(aspectAmountLabel);
         aspectContainerList.appendChild(aspectContainer);
