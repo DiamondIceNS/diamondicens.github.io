@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     };
     
     function onChangeAspectAmount(event) {
-        let container = this.parentNode.parentNode;
+        let container = this.parentNode;
         let i = [...container.parentNode.children].findIndex(x => x === container);
         ASPECT_HALOS[i].count = Number(this.value);
     }
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         const aspectContainer = document.createElement("div");
         const aspectSelect = document.createElement("select");
         const aspectAmount = document.createElement("input");
-        const aspectAmountLabel = document.createElement("label");
+        const removeAspectBtn = document.createElement("div");
         const aspectSelectDiv = document.createElement("div");
     
         /** @type {String[]} */
@@ -166,21 +166,30 @@ document.addEventListener("DOMContentLoaded", function (event) {
         aspectAmount.value = "25";
         aspectAmount.min = 1;
         aspectAmount.step = 1;
-        aspectAmountLabel.appendChild(document.createTextNode("Vis count: "));
-        aspectAmountLabel.appendChild(aspectAmount);
+        removeAspectBtn.classList.add("remove-aspect");
+        removeAspectBtn.innerHTML = "&times;";
         aspectSelectDiv.appendChild(aspectSelect)
         aspectContainer.appendChild(aspectSelectDiv);
-        aspectContainer.appendChild(aspectAmountLabel);
+        aspectContainer.appendChild(aspectAmount);
+        aspectContainer.appendChild(removeAspectBtn);
         aspectContainerList.appendChild(aspectContainer);
     
         aspectSelect.addEventListener("change", onChangeAspectType);
         aspectAmount.addEventListener("change", onChangeAspectAmount);
+        removeAspectBtn.addEventListener("click", removeAspect);
     
         ASPECT_HALOS.push({
             aspect: defaultSelected,
             count: 25,
             bufferInfo: twgl.primitives.createXYQuadBufferInfo(gl, 1, 0, 0)
         });
+    }
+
+    function removeAspect() {
+        const aspectElement = this.parentNode;
+        const i = [...aspectElement.parentNode.children].findIndex(x => x === aspectElement);
+        ASPECT_HALOS.splice(i, 1);
+        aspectElement.parentNode.removeChild(aspectElement);
     }
 
     /** Click event handler for an aspect list custom select dropdown option. */
@@ -196,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 let container = this.parentNode.parentNode.parentNode;
                 let ii = [...container.parentNode.children].findIndex(x => x === container);
                 ASPECT_HALOS[ii].aspect = selectElement.value;
-                for (const x of this.parentNode.parentNode.children) x.classList.remove("same-as-selected");
+                for (const x of this.parentNode.children) x.classList.remove("same-as-selected");
                 this.classList.add("same-as-selected");
             }
         }
