@@ -135,7 +135,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
         a.addEventListener("click", closeAllSelect);
 
         const b = document.createElement("div");
+        const bWrapper = document.createElement("div");
         b.classList.add("select-items", "select-hide");
+        bWrapper.classList.add("select-items-wrapper");
         for (const aa of aspectSelect.options) {
             const c = document.createElement("div");
             const ca = document.createElement("div");
@@ -156,7 +158,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
             c.addEventListener("click", clickSelectOption);
             b.appendChild(c);
         }
-        aspectSelectDiv.appendChild(b);
+        aspectSelectDiv.appendChild(bWrapper);
+        bWrapper.appendChild(b);
     
         aspectSelectDiv.classList.add("div-aspect-select");
         aspectContainer.classList.add("aspect");
@@ -194,15 +197,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     /** Click event handler for an aspect list custom select dropdown option. */
     function clickSelectOption() {
-        const selectElement = this.parentNode.parentNode.querySelector("select");
-        const selectedOptionElement = this.parentNode.previousSibling;
+        const selectElement = this.parentNode.parentNode.parentNode.querySelector("select");
+        const selectedOptionElement = this.parentNode.parentNode.previousSibling;
         const value = this.querySelector(".aspect-name").innerHTML;
         for (let i = 0; i < selectElement.length; i++) {
             if (selectElement.options[i].innerHTML === value) {
                 selectElement.selectedIndex = i;
                 selectedOptionElement.querySelector(".aspect-name").innerHTML = value;
                 selectedOptionElement.querySelector(".aspect-icon-fg").src = "all-aspects.svg#" + selectElement.value;
-                let container = this.parentNode.parentNode.parentNode;
+                let container = this.parentNode.parentNode.parentNode.parentNode;
                 let ii = [...container.parentNode.children].findIndex(x => x === container);
                 ASPECT_HALOS[ii].aspect = selectElement.value;
                 for (const x of this.parentNode.children) x.classList.remove("same-as-selected");
@@ -231,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 x[i].classList.add("select-hide");
             }
         }
-        this.nextSibling.classList.toggle("select-hide");
+        this.nextSibling.firstChild.classList.toggle("select-hide");
         this.classList.toggle("select-arrow-active");
     }
     

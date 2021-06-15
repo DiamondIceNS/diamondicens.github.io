@@ -21,6 +21,14 @@ body {
     width: max-content;
     font-family: "Minecraft Regular";
     color: white;
+    width: 21em;
+    height: 100vh;
+}
+
+#aspects {
+    background: #20202080;
+    height: 25em;
+    overflow-y: scroll;
 }
 
 .aspect {
@@ -64,7 +72,7 @@ body {
 /*the container must be positioned relative:*/
 .div-aspect-select {
     position: relative;
-    width: 13em;
+    width: 14em;
 }
 
 .div-aspect-select select {
@@ -112,13 +120,10 @@ body {
 .select-items {
     position: absolute;
     background-color: #202020e0;
-    top: 100%;
-    left: 0;
-    right: 0;
     z-index: 99;
     max-height: 20em;
     overflow-y: scroll;
-    width: 13em;
+    width: 14em;
 }
 
 .select-items>div>div, .select-selected>div {
@@ -151,8 +156,39 @@ input[type=number] {
     padding: 0.25em;
     transition: background-color 0.1s ease-out 100ms;
     cursor: pointer;
+    user-select: none;
 }
 
 .remove-aspect:hover {
     background-color: rgba(255,0,0,0.45);
+}
+
+#aspects-section-label {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+
+#aspects-section-label>div:nth-child(1) {
+    width: 14em;
+}
+
+#aspects-section-label>div:nth-child(2) {
+    width: 4em;
+}
+
+#aspects-section-label>div>div {
+    font-size: 1.5em;
+}
+
+#btn-add-aspect {
+    margin: 0.5em 0.75em;
+    font-size: 1.5em;
+    color: #55dd55;
+    cursor: pointer;
+    user-select: none;
+}
+
+.select-items-wrapper {
+    position: absolute;
 }
