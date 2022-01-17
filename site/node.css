@@ -1,10 +1,21 @@
 @font-face {
     font-family: "Minecraft Regular";
-    src: url("minecraft-regular.otf");
+    src: url("assets/minecraft-regular.otf");
 }
 
 body {
     margin: 0;
+    background-color: black;
+    /* background-image: url('bg.png'); */
+}
+
+#background-canvas {
+    display: block;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
 }
 
 #node-canvas {
@@ -16,19 +27,75 @@ body {
     z-index: -1;
 }
 
+#open-controls {
+    font-size: 1.5em;
+    font-weight: bolder;
+    padding: 0.25em;
+    transition: background-color 0.1s ease-out 100ms;
+    cursor: pointer;
+    user-select: none;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#open-controls:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+#close-controls-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: end;
+}
+
+#close-controls {
+    font-size: 1.5em;
+    font-weight: bolder;
+    padding: 0.25em;
+    transition: background-color 0.1s ease-out 100ms;
+    cursor: pointer;
+    user-select: none;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#close-controls:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
 #controls {
     background: #202020c0;
-    width: max-content;
     font-family: "Minecraft Regular";
     color: white;
-    width: 21em;
+    width: 0;
     height: 100vh;
+    overflow-x: hidden;
+    transition: 0.25s;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+.control-row {
+    padding: 0.5em 0;
+}
+
+#inner-controls {
+    width: 21em;
 }
 
 #aspects {
     background: #20202080;
     height: 25em;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .aspect {
@@ -191,4 +258,45 @@ input[type=number] {
 
 .select-items-wrapper {
     position: absolute;
+}
+
+#distance-to-node {
+    margin: 0 1em;
+    width: 90%;
+}
+
+#div-about-btn {
+    cursor: pointer;
+}
+
+@keyframes opac {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+#div-about-modal-bg {
+    display: none;
+    animation: opac 1s;
+    z-index: 150;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #00000080;
+    padding-top: 10em;
+}
+
+#div-about-modal {
+    box-shadow: 0 4px 10px 0 #00000080;
+    position: relative;
+    margin: auto;
+    width: 40em;
+    padding: 2em;
+    background: #202020d0;
+    font-family: "Minecraft Regular";
+    color: white;
+    font-size: 1em;
+    z-index: 151;
+    
 }
