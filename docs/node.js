@@ -140,6 +140,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
         /** @type {String[]} */
         let currentAspects = ASPECT_HALOS.reduce((carry, x) => { carry.push(x.aspect); return carry; }, []);
         let defaultSelected = null;
+        if (currentAspects.length === ASPECTS.length) {
+            return;
+        }
         for (let a of ASPECTS) {
             let o = document.createElement("option");
             o.text = a.charAt(0).toUpperCase() + a.substr(1);
